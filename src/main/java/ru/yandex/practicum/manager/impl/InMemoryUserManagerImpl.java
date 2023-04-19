@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryUserManagerImpl implements InMemoryUserManager {
 
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
-    private final AtomicInteger idGenerator = new AtomicInteger(0);
+    private final AtomicInteger idGenerator = new AtomicInteger(1);
 
     @Override
     public User create(User user) {
