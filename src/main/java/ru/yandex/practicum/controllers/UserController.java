@@ -1,6 +1,5 @@
 package ru.yandex.practicum.controllers;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.manager.InMemoryUserManager;
 import ru.yandex.practicum.model.User;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @Slf4j

@@ -1,9 +1,9 @@
 package ru.yandex.practicum.annotation;
 
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
 import ru.yandex.practicum.validator.LoginValidator;
 
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented

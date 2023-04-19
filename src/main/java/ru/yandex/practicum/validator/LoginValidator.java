@@ -1,9 +1,10 @@
 package ru.yandex.practicum.validator;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.annotation.NoSpaces;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 @Slf4j
 public class LoginValidator implements ConstraintValidator<NoSpaces, String> {

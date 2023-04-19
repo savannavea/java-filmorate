@@ -1,10 +1,10 @@
 package ru.yandex.practicum.validator;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.annotation.Positive;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.time.Duration;
 
 @Slf4j
