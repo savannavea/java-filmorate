@@ -19,21 +19,18 @@ public class InMemoryUserManagerImpl implements InMemoryUserManager {
     public User create(User user) {
         Integer userId = idGenerator.getAndIncrement();
         user.setId(userId);
-        return upsert(userId, user);
+        users.put(userId, user);
+        return user;
     }
 
     @Override
-    public User update(Integer id, User user) {
-        return upsert(id, user);
+    public User update(User user) {
+        users.put(user.getId(), user);
+        return user;
     }
 
     @Override
     public Collection<User> findAll() {
         return users.values();
-    }
-
-    private User upsert(Integer id, User user) {
-        users.put(id, user);
-        return users.get(id);
     }
 }
