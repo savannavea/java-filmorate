@@ -26,9 +26,9 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@PathVariable Integer id, @Valid @RequestBody Film film) {
-        log.info("Got request to update film {} with id '{}'", film, id);
-        return manager.update(id, film);
+    public Film update(@Valid @RequestBody Film film) {
+        log.info("Got request to update film {} ", film);
+        return manager.update(film);
     }
 
     @GetMapping

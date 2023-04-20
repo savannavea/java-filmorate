@@ -1,6 +1,7 @@
 package ru.yandex.practicum.manager.impl;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.exception.UserInformationException;
 import ru.yandex.practicum.manager.InMemoryFilmManager;
 import ru.yandex.practicum.model.Film;
 
@@ -19,22 +20,25 @@ public class InMemoryFilmManagerImpl implements InMemoryFilmManager {
     public Film save(Film film) {
         Integer filmId = idGenerator.getAndIncrement();
         film.setId(filmId);
-        return upsert(filmId, film);
+        films.put(filmId, film);
+        return films.get(filmId);
     }
 
     @Override
-    public Film update(Integer id, Film film) {
-        return upsert(id, film);
+    public Film update(Film film) {
+        if (films.size() == 0) {
+            throw new UserInformationException("User  does not exist");
+        }
+        if (!films.containsKey(film.getId())) {
+            throw new UserInformationException("User  does not exist");
+        }
+        films.put(film.getId(), film);
+        return film;
     }
 
     @Override
     public Collection<Film> findAll() {
         return films.values();
-    }
-
-    private Film upsert(Integer id, Film film) {
-        films.put(id, film);
-        return films.get(id);
     }
 
 }

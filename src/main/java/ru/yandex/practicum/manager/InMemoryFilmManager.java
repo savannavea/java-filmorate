@@ -8,7 +8,7 @@ public interface InMemoryFilmManager {
 
     Film save(Film film);
 
-    Film update(Integer id, Film film);
+    Film update(Film film);
 
     Collection<Film> findAll();
 
