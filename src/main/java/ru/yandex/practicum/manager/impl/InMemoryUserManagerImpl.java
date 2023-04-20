@@ -1,6 +1,7 @@
 package ru.yandex.practicum.manager.impl;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.exception.UserInformationException;
 import ru.yandex.practicum.manager.InMemoryUserManager;
 import ru.yandex.practicum.model.User;
 
@@ -25,6 +26,9 @@ public class InMemoryUserManagerImpl implements InMemoryUserManager {
 
     @Override
     public User update(User user) {
+        if(user.getId() == null) {
+            throw new UserInformationException("User  does not exist");
+        }
         users.put(user.getId(), user);
         return user;
     }
