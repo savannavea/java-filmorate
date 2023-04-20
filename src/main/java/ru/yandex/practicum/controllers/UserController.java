@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.exception.UserInformationException;
 import ru.yandex.practicum.manager.InMemoryUserManager;
 import ru.yandex.practicum.model.User;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Slf4j
@@ -22,6 +24,18 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
         log.info("Got request to create user {}", user);
+        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            throw new UserInformationException("Электронная почта не может быть пустой и должна содержать символ @");
+        }
+        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+            throw new UserInformationException("Логин не может содержать пробелы");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new UserInformationException("Дата рождения не может быть в будущем");
+        }
         setLoginAsNameIfEmpty(user);
         return ResponseEntity.ok(manager.create(user));
     }
@@ -29,6 +43,18 @@ public class UserController {
     @PutMapping
     public User update(@Valid @RequestBody User user) {
         log.info("Got request to update user {}", user);
+        if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            throw new UserInformationException("Электронная почта не может быть пустой и должна содержать символ @");
+        }
+        if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
+            throw new UserInformationException("Логин не может содержать пробелы");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new UserInformationException("Дата рождения не может быть в будущем");
+        }
         setLoginAsNameIfEmpty(user);
         return manager.update(user);
     }
