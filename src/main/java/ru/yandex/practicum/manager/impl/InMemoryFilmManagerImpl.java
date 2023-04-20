@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryFilmManagerImpl implements InMemoryFilmManager {
 
     private final Map<Integer, Film> films = new ConcurrentHashMap<>();
-    private final AtomicInteger idGenerator = new AtomicInteger(0);
+    private final AtomicInteger idGenerator = new AtomicInteger(1);
 
     @Override
     public Film save(Film film) {
