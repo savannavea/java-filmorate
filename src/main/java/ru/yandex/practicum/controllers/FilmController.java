@@ -10,7 +10,6 @@ import ru.yandex.practicum.manager.InMemoryFilmManager;
 import ru.yandex.practicum.model.Film;
 
 import javax.validation.Valid;
-
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -31,6 +30,7 @@ public class FilmController {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new FilmInformationException("Release date - no earlier than December 28, 1895");
         }*/
+
         if (film.getName().isBlank() || film.getName() == null) {
             throw new FilmInformationException("Название не может быть пустым");
         }

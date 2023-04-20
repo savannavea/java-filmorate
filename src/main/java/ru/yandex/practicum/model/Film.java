@@ -2,7 +2,6 @@ package ru.yandex.practicum.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
 import ru.yandex.practicum.annotation.Positive;
 
