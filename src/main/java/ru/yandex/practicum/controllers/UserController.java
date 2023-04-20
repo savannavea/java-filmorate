@@ -25,13 +25,13 @@ public class UserController {
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
         log.info("Got request to create user {}", user);
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new UserInformationException("Электронная почта не может быть пустой и должна содержать символ @");
+            throw new UserInformationException("Email cannot be empty and must contain @");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new UserInformationException("Логин не может содержать пробелы");
+            throw new UserInformationException("Login cannot contain spaces");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new UserInformationException("Дата рождения не может быть в будущем");
+            throw new UserInformationException("Birthday can't be in the future");
         }
         setLoginAsNameIfEmpty(user);
         return ResponseEntity.ok(manager.create(user));
@@ -41,13 +41,13 @@ public class UserController {
     public User update(@Valid @RequestBody User user) {
         log.info("Got request to update user {}", user);
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new UserInformationException("Электронная почта не может быть пустой и должна содержать символ @");
+            throw new UserInformationException("Email cannot be empty and must contain @");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new UserInformationException("Логин не может содержать пробелы");
+            throw new UserInformationException("Login cannot contain spaces");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new UserInformationException("Дата рождения не может быть в будущем");
+            throw new UserInformationException("Birthday should be in the future");
         }
         setLoginAsNameIfEmpty(user);
         return manager.update(user);
