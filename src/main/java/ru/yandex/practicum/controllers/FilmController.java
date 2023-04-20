@@ -23,7 +23,7 @@ public class FilmController {
     @PostMapping
     public ResponseEntity<Film> save(@Valid @RequestBody Film film) {
         log.info("Got request to create film {}", film);
-        if (!film.getDuration().isNegative()) {
+        if (!film.getDuration().isNegative() || !film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
         }
         return ResponseEntity.ok(manager.save(film));
