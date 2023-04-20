@@ -30,6 +30,18 @@ public class FilmController {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new FilmInformationException("Release date - no earlier than December 28, 1895");
         }*/
+        if (film.getName().isBlank() || film.getName() == null) {
+            throw new FilmInformationException("Название не может быть пустым");
+        }
+        if (film.getDescription().length() > 200) {
+            throw new FilmInformationException("Максимальная длина описания — 200 символов");
+        }
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new FilmInformationException("Дата релиза — не раньше 28 декабря 1895 года");
+        }
+        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+            throw new FilmInformationException("Продолжительность фильма должна быть положительной");
+        }
         return ResponseEntity.ok(manager.save(film));
     }
 
