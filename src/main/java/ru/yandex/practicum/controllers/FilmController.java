@@ -36,12 +36,12 @@ public class FilmController {
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("Got request to update film {} ", film);
-        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+        /*if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new FilmInformationException("Release date - no earlier than December 28, 1895");
-        }
+        }*/
         return manager.update(film);
     }
 
