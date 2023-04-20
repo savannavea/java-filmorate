@@ -26,9 +26,6 @@ public class InMemoryFilmManagerImpl implements InMemoryFilmManager {
 
     @Override
     public Film update(Film film) {
-        /*if (films.size() == 0) {
-            throw new UserInformationException("User  does not exist");
-        }*/
         if (!films.containsKey(film.getId())) {
             throw new UserInformationException("User  does not exist");
         }

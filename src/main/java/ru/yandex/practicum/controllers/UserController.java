@@ -30,9 +30,6 @@ public class UserController {
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             throw new UserInformationException("Логин не может содержать пробелы");
         }
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new UserInformationException("Дата рождения не может быть в будущем");
         }
@@ -48,9 +45,6 @@ public class UserController {
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             throw new UserInformationException("Логин не может содержать пробелы");
-        }
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new UserInformationException("Дата рождения не может быть в будущем");
