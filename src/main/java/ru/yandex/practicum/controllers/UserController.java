@@ -27,10 +27,10 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@Valid @RequestBody User user) {
+    public ResponseEntity<User> update(@Valid @RequestBody User user) {
         log.info("Got request to update user {}", user);
         setLoginAsNameIfEmpty(user);
-        return manager.update(user);
+        return ResponseEntity.ok(manager.update(user));
     }
 
     @GetMapping
