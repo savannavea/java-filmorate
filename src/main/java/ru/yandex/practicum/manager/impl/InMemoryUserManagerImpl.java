@@ -20,13 +20,13 @@ public class InMemoryUserManagerImpl implements InMemoryUserManager {
         Integer userId = idGenerator.getAndIncrement();
         user.setId(userId);
         users.put(userId, user);
-        return users.get(user.getId());
+        return user;
     }
 
     @Override
     public User update(User user) {
         users.put(user.getId(), user);
-        return users.get(user.getId());
+        return user;
     }
 
     @Override
