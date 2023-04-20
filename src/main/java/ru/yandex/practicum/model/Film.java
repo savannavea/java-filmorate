@@ -28,5 +28,5 @@ public class Film {
 
     @JsonProperty
     @Positive
-    private Duration duration;
+    private Integer duration;
 }
