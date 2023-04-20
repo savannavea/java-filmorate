@@ -26,7 +26,7 @@ public class InMemoryUserManagerImpl implements InMemoryUserManager {
 
     @Override
     public User update(User user) {
-        if(users.size() == 0) {
+        if (users.size() == 0) {
             throw new UserInformationException("User  does not exist");
         }
         users.put(user.getId(), user);
