@@ -23,7 +23,7 @@ public class FilmController {
     @PostMapping
     public ResponseEntity<Film> save(@Valid @RequestBody Film film) {
         log.info("Got request to create film {}", film);
-        if (!film.getDuration().isNegative() || !film.getDuration().isZero()) {
+        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
         }
         return ResponseEntity.ok(manager.save(film));
@@ -32,6 +32,9 @@ public class FilmController {
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("Got request to update film {} ", film);
+        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+            throw new FilmInformationException("Duration must be positive");
+        }
         return manager.update(film);
     }
 
