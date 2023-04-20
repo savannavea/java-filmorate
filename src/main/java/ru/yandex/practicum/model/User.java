@@ -26,7 +26,6 @@ public class User {
     @JsonProperty
     private String login;
 
-    @NotNull
     @JsonProperty
     private String name;
 
