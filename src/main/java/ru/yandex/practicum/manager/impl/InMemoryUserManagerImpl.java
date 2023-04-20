@@ -13,18 +13,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryUserManagerImpl implements InMemoryUserManager {
 
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
-    private final AtomicInteger idGenerator = new AtomicInteger(1);
+    private final AtomicInteger idGenerator = new AtomicInteger(0);
 
     @Override
     public User create(User user) {
         Integer userId = idGenerator.getAndIncrement();
         user.setId(userId);
-        return upsert(userId, user);
+        users.put(userId, user);
+        return users.get(userId);
     }
 
     @Override
-    public User update(Integer id, User user) {
-        return upsert(id, user);
+    public User update(User user) {
+        users.put(user.getId(), user);
+        return user;
     }
 
     @Override
