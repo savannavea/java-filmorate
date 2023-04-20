@@ -26,7 +26,7 @@ public class InMemoryUserManagerImpl implements InMemoryUserManager {
     @Override
     public User update(User user) {
         users.put(user.getId(), user);
-        return user;
+        return users.get(user.getId());
     }
 
     @Override
