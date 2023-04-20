@@ -10,6 +10,7 @@ import ru.yandex.practicum.manager.InMemoryFilmManager;
 import ru.yandex.practicum.model.Film;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Slf4j
@@ -26,6 +27,9 @@ public class FilmController {
         if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
         }
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new FilmInformationException("Release date - no earlier than December 28, 1895");
+        }
         return ResponseEntity.ok(manager.save(film));
     }
 
@@ -34,6 +38,9 @@ public class FilmController {
         log.info("Got request to update film {} ", film);
         if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
+        }
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new FilmInformationException("Release date - no earlier than December 28, 1895");
         }
         return manager.update(film);
     }

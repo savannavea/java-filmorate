@@ -1,13 +1,9 @@
 package ru.yandex.practicum.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
+import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
-import ru.yandex.practicum.annotation.AfterSpecialDate;
 import ru.yandex.practicum.annotation.Positive;
 
 import javax.validation.constraints.NotEmpty;
@@ -29,9 +25,6 @@ public class Film {
     private String description;
 
     @JsonProperty
-    @AfterSpecialDate
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate releaseDate;
 
     @JsonProperty
