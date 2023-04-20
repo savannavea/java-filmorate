@@ -3,10 +3,8 @@ package ru.yandex.practicum.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import ru.yandex.practicum.annotation.Positive;
 
 import javax.validation.constraints.NotEmpty;
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Data
@@ -27,6 +25,5 @@ public class Film {
     private LocalDate releaseDate;
 
     @JsonProperty
-    @Positive
     private Integer duration;
 }
