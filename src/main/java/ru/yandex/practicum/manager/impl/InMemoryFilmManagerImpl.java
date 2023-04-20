@@ -21,7 +21,7 @@ public class InMemoryFilmManagerImpl implements InMemoryFilmManager {
         Integer filmId = idGenerator.getAndIncrement();
         film.setId(filmId);
         films.put(filmId, film);
-        return films.get(filmId);
+        return film;
     }
 
     @Override
