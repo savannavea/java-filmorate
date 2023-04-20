@@ -26,7 +26,7 @@ public class UserController {
         return ResponseEntity.ok(manager.create(user));
     }
 
-    @PutMapping("{id}")
+    @PutMapping
     public User update(@PathVariable Integer id, @Valid @RequestBody User user) {
         log.info("Got request to update user {} with id '{}'", user, id);
         setLoginAsNameIfEmpty(user);

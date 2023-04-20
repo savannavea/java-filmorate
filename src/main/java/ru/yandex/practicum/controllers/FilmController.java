@@ -25,7 +25,7 @@ public class FilmController {
         return ResponseEntity.ok(manager.save(film));
     }
 
-    @PutMapping("{id}")
+    @PutMapping
     public Film update(@PathVariable Integer id, @Valid @RequestBody Film film) {
         log.info("Got request to update film {} with id '{}'", film, id);
         return manager.update(id, film);
