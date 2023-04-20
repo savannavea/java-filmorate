@@ -27,10 +27,10 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@PathVariable Integer id, @Valid @RequestBody User user) {
-        log.info("Got request to update user {} with id '{}'", user, id);
+    public User update( @Valid @RequestBody User user) {
+        log.info("Got request to update user {}", user);
         setLoginAsNameIfEmpty(user);
-        return manager.update(id, user);
+        return manager.update(user);
     }
 
     @GetMapping

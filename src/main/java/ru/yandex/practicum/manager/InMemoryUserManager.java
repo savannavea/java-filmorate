@@ -8,7 +8,7 @@ public interface InMemoryUserManager {
 
     User create(User user);
 
-    User update(Integer id, User user);
+    User update(User user);
 
     Collection<User> findAll();
 }
