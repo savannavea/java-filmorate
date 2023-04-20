@@ -24,12 +24,12 @@ public class FilmController {
     @PostMapping
     public ResponseEntity<Film> save(@Valid @RequestBody Film film) {
         log.info("Got request to create film {}", film);
-        if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+        /*if (film.getDuration().isNegative() || film.getDuration().isZero()) {
             throw new FilmInformationException("Duration must be positive");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new FilmInformationException("Release date - no earlier than December 28, 1895");
-        }
+        }*/
         return ResponseEntity.ok(manager.save(film));
     }
 
