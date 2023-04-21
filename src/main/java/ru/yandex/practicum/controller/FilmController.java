@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(path = "films", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FilmController {
 
-    private final FilmService manager;
+    private final FilmService filmService;
 
     @PostMapping
     public ResponseEntity<Film> save(@Valid @RequestBody Film film) {
@@ -31,17 +31,17 @@ public class FilmController {
             throw new InformationException("Movie duration must be positive");
         }
 
-        return ResponseEntity.ok(manager.create(film));
+        return ResponseEntity.ok(filmService.create(film));
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("Got request to update film {} ", film);
-        return manager.update(film);
+        return filmService.update(film);
     }
 
     @GetMapping
     public List<Film> findAll() {
-        return manager.findAll();
+        return filmService.findAll();
     }
 }
