@@ -28,7 +28,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public Film update(Film film) {
         if (!films.containsKey(film.getId())) {
-            throw new NotFoundException("User  does not exist");
+            throw new NotFoundException("Not found user by id: " + film.getId());
         }
         films.put(film.getId(), film);
         return film;

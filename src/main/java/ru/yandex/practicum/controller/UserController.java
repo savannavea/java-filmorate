@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.exception.InformationException;
+import ru.yandex.practicum.exception.BadRequestException;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.UserService;
@@ -26,13 +26,13 @@ public class UserController {
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
         log.info("Got request to create user {}", user);
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new InformationException("Email cannot be empty and must contain @");
+            throw new BadRequestException("Email cannot be empty and must contain @");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new InformationException("Login cannot contain spaces");
+            throw new BadRequestException("Login cannot contain spaces");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new InformationException("Birthday can't be in the future");
+            throw new BadRequestException("Birthday can't be in the future");
         }
         setLoginAsNameIfEmpty(user);
         return ResponseEntity.ok(manager.create(user));

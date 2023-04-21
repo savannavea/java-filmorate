@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.exception.InformationException;
+import ru.yandex.practicum.exception.BadRequestException;
 import ru.yandex.practicum.model.Film;
 import ru.yandex.practicum.service.FilmService;
 
@@ -25,10 +25,10 @@ public class FilmController {
     public ResponseEntity<Film> save(@Valid @RequestBody Film film) {
         log.info("Got request to create film {}", film);
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new InformationException("Release date - no earlier than December 28, 1895");
+            throw new BadRequestException("Release date - no earlier than December 28, 1895");
         }
         if (film.getDuration() < 0) {
-            throw new InformationException("Movie duration must be positive");
+            throw new BadRequestException("Movie duration must be positive");
         }
 
         return ResponseEntity.ok(filmService.create(film));
