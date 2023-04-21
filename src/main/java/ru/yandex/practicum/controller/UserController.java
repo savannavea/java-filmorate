@@ -1,17 +1,18 @@
-package ru.yandex.practicum.controllers;
+package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.exception.UserInformationException;
-import ru.yandex.practicum.manager.InMemoryUserManager;
+import ru.yandex.practicum.exception.InformationException;
+import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.User;
+import ru.yandex.practicum.service.UserService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,19 +20,19 @@ import java.util.Collection;
 @RequestMapping(path = "users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    private final InMemoryUserManager manager;
+    private final UserService manager;
 
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
         log.info("Got request to create user {}", user);
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new UserInformationException("Email cannot be empty and must contain @");
+            throw new InformationException("Email cannot be empty and must contain @");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new UserInformationException("Login cannot contain spaces");
+            throw new InformationException("Login cannot contain spaces");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new UserInformationException("Birthday can't be in the future");
+            throw new InformationException("Birthday can't be in the future");
         }
         setLoginAsNameIfEmpty(user);
         return ResponseEntity.ok(manager.create(user));
@@ -41,20 +42,20 @@ public class UserController {
     public User update(@Valid @RequestBody User user) {
         log.info("Got request to update user {}", user);
         if (user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new UserInformationException("Email cannot be empty and must contain @");
+            throw new NotFoundException("Email cannot be empty and must contain @");
         }
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            throw new UserInformationException("Login cannot contain spaces");
+            throw new NotFoundException("Login cannot contain spaces");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new UserInformationException("Birthday should be in the future");
+            throw new NotFoundException("Birthday should be in the future");
         }
         setLoginAsNameIfEmpty(user);
         return manager.update(user);
     }
 
     @GetMapping
-    public Collection<User> findAll() {
+    public List<User> findAll() {
         return manager.findAll();
     }
 

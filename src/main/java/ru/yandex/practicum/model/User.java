@@ -2,7 +2,7 @@ package ru.yandex.practicum.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import ru.yandex.practicum.annotation.NoSpaces;
+import ru.yandex.practicum.annotation.NoWhitespaces;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -21,7 +21,7 @@ public class User {
     private String email;
 
     @NotEmpty
-    @NoSpaces
+    @NoWhitespaces
     @JsonProperty
     private String login;
 
