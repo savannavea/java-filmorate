@@ -6,9 +6,20 @@ import java.util.List;
 
 public interface UserService {
 
-    User create(User user);
+    User createUser(User user);
 
-    User update(User user);
+    User updateUser(User user);
 
-    List<User> findAll();
+    List<User> findAllUsers();
+
+    User findUserById(int id);
+
+    Integer addToFriends(int userId, int filmId);
+
+    void deleteFromFriends(int userId, int filmId);
+
+    List<User> getFriendsList(int id);
+
+    List<User> getCommonFriends(int userId, int friendId);
+
 }

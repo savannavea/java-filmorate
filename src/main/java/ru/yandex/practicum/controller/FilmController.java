@@ -2,6 +2,7 @@ package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +32,43 @@ public class FilmController {
             throw new BadRequestException("Movie duration must be positive");
         }
 
-        return ResponseEntity.ok(filmService.create(film));
+        return ResponseEntity.ok(filmService.createFilm(film));
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("Got request to update film {} ", film);
-        return filmService.update(film);
+        return filmService.updateFilm(film);
     }
 
     @GetMapping
     public List<Film> findAll() {
-        return filmService.findAll();
+        return filmService.findAllFilms();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Film findFilmById(@PathVariable int id) {
+        return filmService.findFilmById(id);
+    }
+
+    @PutMapping("/{filmId}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addLike(@PathVariable int filmId, @PathVariable int userId) {
+        log.info("user {} has liked", userId);
+        filmService.addLike(filmId, userId);
+    }
+
+    @DeleteMapping("/{filmId}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLike(@PathVariable int filmId, @PathVariable int userId) {
+        log.info("user {} deleted like", userId);
+        filmService.deleteLike(userId, filmId);
+    }
+
+    @GetMapping("films/popular?count={count}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getTopFilms(count);
     }
 }

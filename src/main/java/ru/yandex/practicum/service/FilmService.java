@@ -6,9 +6,17 @@ import java.util.List;
 
 public interface FilmService {
 
-    Film create(Film film);
+    Film createFilm(Film film);
 
-    Film update(Film film);
+    Film updateFilm(Film film);
 
-    List<Film> findAll();
+    List<Film> findAllFilms();
+
+    Film findFilmById(int id);
+
+    void addLike(int userId, int filmId);
+
+    void deleteLike(int userId, int filmId);
+
+    List<Film> getTopFilms(int count);
 }
