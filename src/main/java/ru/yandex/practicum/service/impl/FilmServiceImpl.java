@@ -11,7 +11,6 @@ import ru.yandex.practicum.storage.UserStorage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -58,8 +57,8 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<Film> getTopFilms(int count) {
-        return filmStorage.getFilmList().stream().sorted(Comparator.comparingInt(film -> film.getLikes().size()))
-                .limit(count)
-                .collect(Collectors.toList());
+        List<Film> sortedByLikesFilms = filmStorage.getFilmList();
+        sortedByLikesFilms.sort((Comparator.comparingInt(o -> o.getLikes().size())));
+        return sortedByLikesFilms;
     }
 }

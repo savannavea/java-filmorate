@@ -38,10 +38,6 @@ public class User {
 
     private final Set<Integer> friends = new HashSet<>();
 
-    public Set<Integer> getFriends() {
-        return friends;
-    }
-
     public void addFriend(int friendId) {
         friends.add(friendId);
     }
