@@ -28,7 +28,8 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film update(Film film) {
-        filmStorage.findFilmById(film.getId())
+        filmStorage
+                .findFilmById(film.getId())
                 .orElseThrow(() -> new NotFoundException("Not found film by id: " + film.getId()));
 
         return filmStorage.update(film);
@@ -41,32 +42,39 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film getFilmById(int id) {
-        return filmStorage.findFilmById(id)
+        return filmStorage
+                .findFilmById(id)
                 .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + id));
 
     }
 
     @Override
     public void addLike(int userId, int filmId) {
-        User user = userStorage.findUserById(userId)
+        User user = userStorage
+                .findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        Film film = filmStorage.findFilmById(filmId)
+        Film film = filmStorage
+                .findFilmById(filmId)
                 .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
         film.addLike(user);
     }
 
     @Override
     public void deleteLike(int userId, int filmId) {
-        User user = userStorage.findUserById(userId)
+        User user = userStorage
+                .findUserById(userId)
                 .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        Film film = filmStorage.findFilmById(filmId)
+        Film film = filmStorage
+                .findFilmById(filmId)
                 .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
         film.deleteLike(user);
     }
 
     @Override
     public List<Film> getTopFilms(int count) {
-        return filmStorage.listFilms().stream()
+        return filmStorage
+                .listFilms()
+                .stream()
                 .sorted(Comparator.comparingInt(o -> o.getLikes().size()))
                 .limit(count)
                 .collect(Collectors.toList());
