@@ -20,6 +20,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         Integer filmId = idGenerator.getAndIncrement();
         film.setId(filmId);
         films.put(filmId, film);
+
         return film;
     }
 
@@ -30,17 +31,17 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteAll() {
-        films.clear();
-    }
-
-    @Override
     public Optional<Film> findFilmById(int id) {
         return Optional.ofNullable(films.get(id));
     }
 
     @Override
     public List<Film> findAll() {
+        return new ArrayList<>(films.values());
+    }
+
+    @Override
+    public List<Film> listFilms() {
         return new ArrayList<>(films.values());
     }
 }

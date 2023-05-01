@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        User userById = userStorage.findUserById(user.getId())
+        userStorage.findUserById(user.getId())
                 .orElseThrow(() -> new NotFoundException("Not found user by id: " + user.getId()));
 
         return userStorage.update(user);
@@ -41,27 +41,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int id) {
-        User userById = userStorage.findUserById(id)
+        return userStorage.findUserById(id)
                 .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id));
-
-        return userById;
     }
 
     @Override
     public Integer addToFriends(int userId, int friendId) {
-        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        User friend = userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+        User user = userStorage.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage.findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
 
         user.addFriend(friendId);
         friend.addFriend(userId);
 
-        return userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId)).getFriends().size();
+        return userStorage.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
+                .getFriends()
+                .size();
     }
 
     @Override
     public void deleteFromFriends(int userId, int friendId) {
-        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        User friend = userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+        User user = userStorage.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage.findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
 
         user.deleteFriend(friendId);
         friend.deleteFriend(userId);
@@ -69,7 +74,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Optional<User>> getFriendsList(int id) {
-        return userStorage.findUserById(id).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id))
+        return userStorage.findUserById(id)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id))
                 .getFriends()
                 .stream()
                 .map(userStorage::findUserById)
@@ -78,8 +84,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Optional<User>> getCommonFriends(int userId, int friendId) {
-        Set<Integer> users = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId)).getFriends();
-        return userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId)).getFriends().stream()
+        Set<Integer> users = userStorage.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
+                .getFriends();
+        return userStorage.findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId))
+                .getFriends()
+                .stream()
                 .filter(users::contains)
                 .map(userStorage::findUserById)
                 .collect(Collectors.toList());
