@@ -30,7 +30,7 @@ public class FilmServiceImpl implements FilmService {
         Film filmById = filmStorage.findFilmById(film.getId())
                 .orElseThrow(() -> new NotFoundException("Not found film by id: " + film.getId()));
 
-        return filmStorage.update(filmById);
+        return filmStorage.update(film);
     }
 
     @Override

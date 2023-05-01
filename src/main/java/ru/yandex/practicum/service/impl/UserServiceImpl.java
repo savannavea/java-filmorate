@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         User userById = userStorage.findUserById(user.getId())
                 .orElseThrow(() -> new NotFoundException("Not found user by id: " + user.getId()));
 
-        return userStorage.update(userById);
+        return userStorage.update(user);
     }
 
     @Override
