@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface UserService {
 
-    User createUser(User user);
+    User create(User user);
 
-    User updateUser(User user);
+    User update(User user);
 
-    List<User> findAllUsers();
+    List<User> getAll();
 
-    User findUserById(int id);
+    User getUserById(int id);
 
     Integer addToFriends(int userId, int filmId);
 

@@ -2,12 +2,12 @@ package ru.yandex.practicum.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.UserService;
 import ru.yandex.practicum.storage.FilmStorage;
 import ru.yandex.practicum.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,24 +20,30 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         userStorage.createUser(user);
         return user;
     }
 
     @Override
-    public User updateUser(User user) {
+    public User update(User user) {
+        if (!userStorage.findAllId().contains(user.getId())) {
+            throw new NotFoundException("User  does not exist");
+        }
         userStorage.updateUser(user);
         return user;
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return new ArrayList<>(userStorage.getUserList());
+    public List<User> getAll() {
+        return userStorage.findUserList();
     }
 
     @Override
-    public User findUserById(int id) {
+    public User getUserById(int id) {
+        if (!userStorage.findAllId().contains(id)) {
+            throw new NotFoundException(String.format("User's id %d doesn't found!", id));
+        }
         return userStorage.findUserById(id);
     }
 

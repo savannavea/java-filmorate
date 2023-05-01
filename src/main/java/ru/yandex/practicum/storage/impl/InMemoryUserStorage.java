@@ -2,7 +2,7 @@ package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.exception.NotFoundException;
+import ru.yandex.practicum.model.Film;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.storage.UserStorage;
 
@@ -15,6 +15,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Integer, User> users = new HashMap<>();
     private final AtomicInteger idGenerator = new AtomicInteger(1);
+    private static int id;
 
 
     @Override
@@ -27,9 +28,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        if (!users.containsKey(user.getId())) {
-            throw new NotFoundException("User  does not exist");
-        }
         users.put(user.getId(), user);
         return user;
     }
@@ -40,20 +38,17 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User findUserById(int id) {
-        if (!users.containsKey(id)) {
-            throw new NotFoundException(String.format("User's id %d doesn't found!", id));
-        }
-        return users.get(id);
+    public Optional<User> findUserById(int id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public List<User> getUserList() {
+    public List<User> findUserList() {
         return new ArrayList<>(users.values());
     }
 
     @Override
-    public Set<Integer> getAllId() {
+    public Set<Integer> findAllId() {
         return users.keySet();
     }
 }

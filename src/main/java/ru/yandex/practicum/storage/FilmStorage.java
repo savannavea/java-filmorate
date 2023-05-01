@@ -3,6 +3,7 @@ package ru.yandex.practicum.storage;
 import ru.yandex.practicum.model.Film;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface FilmStorage {
@@ -12,9 +13,9 @@ public interface FilmStorage {
 
     void deleteAllFilms();
 
-    Film findFilmById(int id);
+    Optional<Film> findFilmById(int id);
 
-    List<Film> getFilmList();
+    List<Film> findFilmList();
 
-    Set<Integer> getAllId();
+    Set<Integer> findAllId();
 }

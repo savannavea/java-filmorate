@@ -32,24 +32,24 @@ public class FilmController {
             throw new BadRequestException("Movie duration must be positive");
         }
 
-        return ResponseEntity.ok(filmService.createFilm(film));
+        return ResponseEntity.ok(filmService.create(film));
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("Got request to update film {} ", film);
-        return filmService.updateFilm(film);
+        return filmService.update(film);
     }
 
     @GetMapping
     public List<Film> findAll() {
-        return filmService.findAllFilms();
+        return filmService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Film findFilmById(@PathVariable int id) {
-        return filmService.findFilmById(id);
+        return filmService.getFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")

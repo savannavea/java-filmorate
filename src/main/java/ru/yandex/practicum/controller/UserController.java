@@ -36,7 +36,7 @@ public class UserController {
             throw new BadRequestException("Birthday can't be in the future");
         }
         setLoginAsNameIfEmpty(user);
-        return ResponseEntity.ok(userService.createUser(user));
+        return ResponseEntity.ok(userService.create(user));
     }
 
     @PutMapping
@@ -52,17 +52,17 @@ public class UserController {
             throw new NotFoundException("Birthday should be in the future");
         }
         setLoginAsNameIfEmpty(user);
-        return userService.updateUser(user);
+        return userService.update(user);
     }
 
     @GetMapping
     public List<User> findAll() {
-        return userService.findAllUsers();
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable int id) {
-        return userService.findUserById(id);
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")

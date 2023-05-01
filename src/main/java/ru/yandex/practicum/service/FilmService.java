@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface FilmService {
 
-    Film createFilm(Film film);
+    Film create(Film film);
 
-    Film updateFilm(Film film);
+    Film update(Film film);
 
-    List<Film> findAllFilms();
+    List<Film> getAll();
 
-    Film findFilmById(int id);
+    Film getFilmById(int id);
 
     void addLike(int userId, int filmId);
 

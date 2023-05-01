@@ -2,7 +2,6 @@ package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.Film;
 import ru.yandex.practicum.storage.FilmStorage;
 
@@ -26,9 +25,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        if (!films.containsKey(film.getId())) {
-            throw new NotFoundException("Not found user by id: " + film.getId());
-        }
         films.put(film.getId(), film);
         return film;
     }
@@ -39,20 +35,17 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film findFilmById(int id) {
-        if (!films.containsKey(id)) {
-            throw new NotFoundException(String.format("Film's id %d doesn't found!", id));
-        }
-        return films.get(id);
+    public Optional<Film> findFilmById(int id) {
+        return Optional.ofNullable(films.get(id));
     }
 
     @Override
-    public List<Film> getFilmList() {
+    public List<Film> findFilmList() {
         return new ArrayList<>(films.values());
     }
 
     @Override
-    public Set<Integer> getAllId() {
+    public Set<Integer> findAllId() {
         return films.keySet();
     }
 }
