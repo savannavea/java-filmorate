@@ -40,8 +40,4 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new ArrayList<>(films.values());
     }
 
-    @Override
-    public List<Film> listFilms() {
-        return new ArrayList<>(films.values());
-    }
 }

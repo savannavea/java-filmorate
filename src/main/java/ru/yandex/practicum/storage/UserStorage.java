@@ -10,8 +10,6 @@ public interface UserStorage {
 
     User update(User user);
 
-    void deleteAll();
-
     Optional<User> findUserById(int id);
 
     List<User> findAll();

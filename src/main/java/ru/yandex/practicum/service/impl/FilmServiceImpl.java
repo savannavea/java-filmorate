@@ -73,7 +73,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> getTopFilms(int count) {
         return filmStorage
-                .listFilms()
+                .findAll()
                 .stream()
                 .sorted(Comparator.comparingInt(o -> o.getLikes().size()))
                 .limit(count)
