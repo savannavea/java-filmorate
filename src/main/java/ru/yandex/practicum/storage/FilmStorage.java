@@ -4,18 +4,16 @@ import ru.yandex.practicum.model.Film;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface FilmStorage {
-    Film createFilm(Film film);
+    Film create(Film film);
 
-    Film updateFilm(Film film);
+    Film update(Film film);
 
-    void deleteAllFilms();
+    void deleteAll();
 
     Optional<Film> findFilmById(int id);
 
-    List<Film> findFilmList();
+    List<Film> findAll();
 
-    Set<Integer> findAllId();
 }

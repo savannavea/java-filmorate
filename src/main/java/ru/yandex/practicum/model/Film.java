@@ -40,5 +40,4 @@ public class Film {
     public void deleteLike(User user) {
         likes.remove(user.getId());
     }
-
 }

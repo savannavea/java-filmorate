@@ -9,6 +9,7 @@ import ru.yandex.practicum.storage.FilmStorage;
 import ru.yandex.practicum.storage.UserStorage;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,61 +22,64 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        userStorage.createUser(user);
+        userStorage.create(user);
         return user;
     }
 
     @Override
     public User update(User user) {
-        if (!userStorage.findAllId().contains(user.getId())) {
-            throw new NotFoundException("User  does not exist");
-        }
-        userStorage.updateUser(user);
-        return user;
+        User userById = userStorage.findUserById(user.getId())
+                .orElseThrow(() -> new NotFoundException("Not found user by id: " + user.getId()));
+
+        return userStorage.update(userById);
     }
 
     @Override
     public List<User> getAll() {
-        return userStorage.findUserList();
+        return userStorage.findAll();
     }
 
     @Override
     public User getUserById(int id) {
-        if (!userStorage.findAllId().contains(id)) {
-            throw new NotFoundException(String.format("User's id %d doesn't found!", id));
-        }
-        return userStorage.findUserById(id);
+        User userById = userStorage.findUserById(id)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id));
+
+        return userById;
     }
 
     @Override
     public Integer addToFriends(int userId, int friendId) {
-        User user = userStorage.findUserById(userId);
-        User friend = userStorage.findUserById(friendId);
+        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+
         user.addFriend(friendId);
         friend.addFriend(userId);
 
-        return userStorage.findUserById(userId).getFriends().size();
+        return userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId)).getFriends().size();
     }
 
     @Override
     public void deleteFromFriends(int userId, int friendId) {
-        User user = userStorage.findUserById(userId);
-        User friend = userStorage.findUserById(friendId);
+        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+
         user.deleteFriend(friendId);
         friend.deleteFriend(userId);
     }
 
     @Override
-    public List<User> getFriendsList(int id) {
-        return userStorage.findUserById(id).getFriends().stream()
+    public List<Optional<User>> getFriendsList(int id) {
+        return userStorage.findUserById(id).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id))
+                .getFriends()
+                .stream()
                 .map(userStorage::findUserById)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<User> getCommonFriends(int userId, int friendId) {
-        Set<Integer> users = userStorage.findUserById(userId).getFriends();
-        return userStorage.findUserById(friendId).getFriends().stream()
+    public List<Optional<User>> getCommonFriends(int userId, int friendId) {
+        Set<Integer> users = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId)).getFriends();
+        return userStorage.findUserById(friendId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId)).getFriends().stream()
                 .filter(users::contains)
                 .map(userStorage::findUserById)
                 .collect(Collectors.toList());

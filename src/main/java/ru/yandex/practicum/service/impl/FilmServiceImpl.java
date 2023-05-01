@@ -21,49 +21,50 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film create(Film film) {
-        filmStorage.createFilm(film);
+        filmStorage.create(film);
         return film;
     }
 
     @Override
     public Film update(Film film) {
-        if (!filmStorage.findAllId().contains(film.getId())) {
-            throw new NotFoundException("Not found user by id: " + film.getId());
-        }
-        filmStorage.updateFilm(film);
-        return film;
+        Film filmById = filmStorage.findFilmById(film.getId())
+                .orElseThrow(() -> new NotFoundException("Not found film by id: " + film.getId()));
+
+        return filmStorage.update(filmById);
     }
 
     @Override
     public List<Film> getAll() {
-        return filmStorage.findFilmList();
+        return filmStorage.findAll();
     }
 
     @Override
     public Film getFilmById(int id) {
-        if (!filmStorage.findAllId().contains(id)) {
-            throw new NotFoundException(String.format("Film's id %d doesn't found!", id));
-        }
-        return filmStorage.findFilmById(id);
+        Film filmById = filmStorage.findFilmById(id)
+                .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + id));
+
+        return filmById;
     }
 
     @Override
     public void addLike(int userId, int filmId) {
-        User user = userStorage.findUserById(userId);
-        Film film = filmStorage.findFilmById(filmId);
+        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        Film film = filmStorage.findFilmById(filmId)
+                .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
         film.addLike(user);
     }
 
     @Override
     public void deleteLike(int userId, int filmId) {
-        User user = userStorage.findUserById(userId);
-        Film film = filmStorage.findFilmById(filmId);
+        User user = userStorage.findUserById(userId).orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        Film film = filmStorage.findFilmById(filmId)
+                .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
         film.deleteLike(user);
     }
 
     @Override
     public List<Film> getTopFilms(int count) {
-        List<Film> sortedByLikesFilms = filmStorage.findFilmList();
+        List<Film> sortedByLikesFilms = filmStorage.findAll();
         sortedByLikesFilms.sort((Comparator.comparingInt(o -> o.getLikes().size())));
         return sortedByLikesFilms;
     }

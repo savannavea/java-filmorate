@@ -16,7 +16,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final AtomicInteger idGenerator = new AtomicInteger(1);
 
     @Override
-    public Film createFilm(Film film) {
+    public Film create(Film film) {
         Integer filmId = idGenerator.getAndIncrement();
         film.setId(filmId);
         films.put(filmId, film);
@@ -24,13 +24,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Film update(Film film) {
         films.put(film.getId(), film);
         return film;
     }
 
     @Override
-    public void deleteAllFilms() {
+    public void deleteAll() {
         films.clear();
     }
 
@@ -40,12 +40,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> findFilmList() {
+    public List<Film> findAll() {
         return new ArrayList<>(films.values());
-    }
-
-    @Override
-    public Set<Integer> findAllId() {
-        return films.keySet();
     }
 }

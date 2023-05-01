@@ -3,6 +3,7 @@ package ru.yandex.practicum.service;
 import ru.yandex.practicum.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -18,8 +19,8 @@ public interface UserService {
 
     void deleteFromFriends(int userId, int filmId);
 
-    List<User> getFriendsList(int id);
+    List<Optional<User>> getFriendsList(int id);
 
-    List<User> getCommonFriends(int userId, int friendId);
+    List<Optional<User>> getCommonFriends(int userId, int friendId);
 
 }
