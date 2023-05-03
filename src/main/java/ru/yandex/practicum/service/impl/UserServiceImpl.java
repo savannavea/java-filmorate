@@ -1,41 +1,105 @@
 package ru.yandex.practicum.service.impl;
 
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.UserService;
+import ru.yandex.practicum.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Component
+@RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final Map<Integer, User> users = new ConcurrentHashMap<>();
-    private final AtomicInteger idGenerator = new AtomicInteger(1);
+    private final UserStorage userStorage;
 
     @Override
     public User create(User user) {
-        Integer userId = idGenerator.getAndIncrement();
-        user.setId(userId);
-        users.put(userId, user);
+        userStorage.create(user);
         return user;
     }
 
     @Override
     public User update(User user) {
-        if (!users.containsKey(user.getId())) {
-            throw new NotFoundException("User  does not exist");
-        }
-        users.put(user.getId(), user);
-        return user;
+        userStorage
+                .findUserById(user.getId())
+                .orElseThrow(() -> new NotFoundException("Not found user by id: " + user.getId()));
+
+        return userStorage.update(user);
     }
 
     @Override
-    public List<User> findAll() {
-        return new ArrayList<>(users.values());
+    public List<User> getAll() {
+        return userStorage.findAll();
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return userStorage.findUserById(id)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id));
+    }
+
+    @Override
+    public Integer addToFriends(int userId, int friendId) {
+        User user = userStorage
+                .findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage
+                .findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+
+        user.addFriend(friendId);
+        friend.addFriend(userId);
+
+        return userStorage
+                .findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
+                .getFriends()
+                .size();
+    }
+
+    @Override
+    public void deleteFromFriends(int userId, int friendId) {
+        User user = userStorage
+                .findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
+        User friend = userStorage
+                .findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
+
+        user.deleteFriend(friendId);
+        friend.deleteFriend(userId);
+    }
+
+    @Override
+    public List<Optional<User>> getFriendsList(int id) {
+        return userStorage
+                .findUserById(id)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id))
+                .getFriends()
+                .stream()
+                .map(userStorage::findUserById)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Optional<User>> getCommonFriends(int userId, int friendId) {
+        Set<Integer> users = userStorage
+                .findUserById(userId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
+                .getFriends();
+        return userStorage
+                .findUserById(friendId)
+                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId))
+                .getFriends()
+                .stream()
+                .filter(users::contains)
+                .map(userStorage::findUserById)
+                .collect(Collectors.toList());
     }
 }

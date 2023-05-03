@@ -2,6 +2,7 @@ package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,32 @@ public class FilmController {
 
     @GetMapping
     public List<Film> findAll() {
-        return filmService.findAll();
+        return filmService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Film findFilmById(@PathVariable int id) {
+        return filmService.getFilmById(id);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
+        log.info("user {} has liked", userId);
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLike(@PathVariable int id, @PathVariable int userId) {
+        log.info("user {} deleted like", userId);
+        filmService.deleteLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getTopFilms(count);
     }
 }

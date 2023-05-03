@@ -2,6 +2,7 @@ package ru.yandex.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import ru.yandex.practicum.service.UserService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -20,7 +22,7 @@ import java.util.List;
 @RequestMapping(path = "users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    private final UserService manager;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
@@ -35,7 +37,7 @@ public class UserController {
             throw new BadRequestException("Birthday can't be in the future");
         }
         setLoginAsNameIfEmpty(user);
-        return ResponseEntity.ok(manager.create(user));
+        return ResponseEntity.ok(userService.create(user));
     }
 
     @PutMapping
@@ -51,12 +53,43 @@ public class UserController {
             throw new NotFoundException("Birthday should be in the future");
         }
         setLoginAsNameIfEmpty(user);
-        return manager.update(user);
+        return userService.update(user);
     }
 
     @GetMapping
     public List<User> findAll() {
-        return manager.findAll();
+        return userService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public User findUserById(@PathVariable int id) {
+        return userService.getUserById(id);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addToFriends(@PathVariable int id, @PathVariable int friendId) {
+        log.info("User added to the friends: {}", friendId);
+        userService.addToFriends(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteFriends(@PathVariable int id, @PathVariable int friendId) {
+        log.info("User removed from the friends: {}", friendId);
+        userService.deleteFromFriends(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Optional<User>> getFriendsList(@PathVariable int id) {
+        return userService.getFriendsList(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Optional<User>> getFriendsCommonList(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getCommonFriends(id, otherId);
     }
 
     private void setLoginAsNameIfEmpty(User user) {
