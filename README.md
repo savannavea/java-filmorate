@@ -5,12 +5,12 @@ Template repository for Filmorate project.
 
 ### [Ссылка на диаграмму](https://dbdiagram.io/d/6453ac26dca9fb07c4814ace)
 
-![Untitled](https://user-images.githubusercontent.com/108272134/236295319-16d0cd32-ebd4-4f1d-84b2-a9161f811198.png)
+![Untitled](https://user-images.githubusercontent.com/108272134/236443109-f11e9733-8596-496b-8726-5600f280bb60.png)
 
 
 # Описание схемы
 
-### film:
+### films:
 Содержит информацию о фильмах.
 ```
 Первичный ключ film_id - Идентификатор фильма.
@@ -20,7 +20,7 @@ release_date - Дата релиза фильма.
 duration - Продолжительность фильма.
 rating_id - Идентификатор рейтинга MPA
 ```
-### user:
+### users:
 Содержит информацию о пользователях.
 ```
 Первичный ключ user_id - Идентификатор пользователя.
@@ -32,14 +32,14 @@ birthday - Дата рождения пользователя
 ### likes:
 Содержит информацию о лайках фильмам.
 ```
-user_id - Идентификатор пользователя, который поставил лайк.
-film_id - Идентификатор фильма которму поставили лайк.
+Первичный ключ user_id - Идентификатор пользователя, который поставил лайк.
+Первичный ключ film_id - Идентификатор фильма которму поставили лайк.
 ```
 ### film_genre:
 Содержит информацию о жанрах фильма.
 ```
-film_id - Идентификатор фильма.
-genre_id - Идентификатор жанра, к которому относится фильм.
+Первичный ключ film_id - Идентификатор фильма.
+Первичный ключ genre_id - Идентификатор жанра, к которому относится фильм.
 ```
 ### genre:
 Содержит информацию о жанрах.
@@ -68,21 +68,21 @@ status - Статус добавления друга.
 1. Получение фильма по Id.
 ```
 SELECT *
-FROM film
+FROM films
 WHERE film_id = 1;
 ```
 
 2. Получение списка фильмов.
 ```
 SELECT *
-FROM film;
+FROM films;
 ```
 
 3. Получить 5 новых фильмов.
 ```
 SELECT name,
 EXTRACT(YEAR FROM CAST(release_date AS date))
-FROM film
+FROM films
 ORDER BY release_date DESC
 LIMIT 5;
 ```
@@ -90,18 +90,18 @@ LIMIT 5;
 4. Получение списка пользователей.
 ```
 SELECT *
-FROM user;
+FROM users;
 ```
 
 5. Получение пользователя по id.
 ```
 SELECT *
-FROM user
+FROM users
 WHERE user_id = 1;
 ```
 
 6. Добавление нового пользователя в таблицу.
 ```
-INSERT INTO user (email, login, name, birthday)
+INSERT INTO users (email, login, name, birthday)
 VALUES ('email', 'login', 'name', 'birthday');
 ```
