@@ -1,5 +1,5 @@
 package ru.yandex.practicum.storage.impl;
-
+/*
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.model.Film;
@@ -40,4 +40,4 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new ArrayList<>(films.values());
     }
 
-}
+}*/

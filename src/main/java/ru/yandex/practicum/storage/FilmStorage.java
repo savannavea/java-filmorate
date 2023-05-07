@@ -14,4 +14,8 @@ public interface FilmStorage {
 
     List<Film> findAll();
 
+    boolean addGenreToFilm(int filmId, int genreId);
+
+    boolean clearGenresFromFilm(int filmId);
+
 }

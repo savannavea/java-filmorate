@@ -1,0 +1,106 @@
+package ru.yandex.practicum.storage.impl;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.model.Film;
+import ru.yandex.practicum.model.MPA;
+import ru.yandex.practicum.storage.FilmStorage;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+@Component
+public class FilmDbStorage implements FilmStorage {
+    private final JdbcTemplate jdbcTemplate;
+
+    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Film create(Film film) {
+        final String sql = "insert into films (name, release_date, description, duration, rate) " +
+                "values (?, ?, ?, ?, ?)";
+
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("films")
+                .usingGeneratedKeyColumns("film_id");
+        int id = simpleJdbcInsert.executeAndReturnKey(film.toMap()).intValue();
+        film.setId(id);
+        film.getGenres().forEach(genre -> addGenreToFilm(id, genre.getId()));
+        return film;
+    }
+
+    @Override
+    public Film update(Film film) {
+        String sql = "update films set name = ?, description = ?, releaseDate = ?, " +
+                "duration = ?, mpa = ? where film_id = ?";
+
+        jdbcTemplate.update(sql,
+                film.getName(),
+                film.getReleaseDate(),
+                film.getDescription(),
+                film.getDuration(),
+                film.getMpa().getId(),
+                film.getId());
+
+        clearGenresFromFilm(film.getId());
+        film.getGenres().forEach(genre -> addGenreToFilm(film.getId(), genre.getId()));
+        return film;
+    }
+
+    @Override
+    public Optional<Film> findFilmById(int id) {
+        String sql = "select * from films where film_id = ?;";
+        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToFilm(rs), id));
+    }
+
+    @Override
+    public List<Film> findAll() {
+        String sql = "select * from films;";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToFilm(rs));
+    }
+
+    @Override
+    public boolean addGenreToFilm(int filmId, int genreId) {
+        String sql = "insert into film_genre(film_id, genre_id) " +
+                "values (?, ?)";
+        return jdbcTemplate.update(sql, filmId, genreId) > 0;
+    }
+
+    @Override
+    public boolean clearGenresFromFilm(int filmId) {
+        String sql = "delete from film_genre where film_id = ?";
+        return jdbcTemplate.update(sql, filmId) > 0;
+    }
+
+    private Film mapRowToFilm(ResultSet rs) throws SQLException {
+        int id = rs.getInt("film_id");
+        String name = rs.getString("name");
+        String description = rs.getString("description");
+        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
+        int duration = rs.getInt("duration");
+        int mpaId = rs.getInt("mpa_id");
+        String mpaName = rs.getString("mpa_name");
+
+        MPA mpa = MPA.builder()
+                .id(mpaId)
+                .name(mpaName)
+                .build();
+
+        return Film.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .releaseDate(releaseDate)
+                .duration(duration)
+                .mpa(mpa)
+                .build();
+    }
+}
