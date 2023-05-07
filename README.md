@@ -5,7 +5,7 @@ Template repository for Filmorate project.
 
 ### [Ссылка на диаграмму](https://dbdiagram.io/d/6453ac26dca9fb07c4814ace)
 
-![Untitled](https://user-images.githubusercontent.com/108272134/236443109-f11e9733-8596-496b-8726-5600f280bb60.png)
+![Untitled](https://user-images.githubusercontent.com/108272134/236670837-d4d4a632-f66c-4eb3-9251-45f47ec41a2d.png)
 
 
 # Описание схемы
