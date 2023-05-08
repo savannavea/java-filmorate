@@ -22,5 +22,4 @@ public interface UserService {
     Optional<List<User>> getFriendsList(int id);
 
     List<User> getCommonFriends(int userId, int friendId);
-
 }

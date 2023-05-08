@@ -13,5 +13,4 @@ public interface UserStorage {
     Optional<User> findUserById(int id);
 
     List<User> findAll();
-
 }

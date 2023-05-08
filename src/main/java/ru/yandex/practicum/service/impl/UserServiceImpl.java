@@ -47,16 +47,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Integer> addToFriends(int userId, int friendId) {
-       /* User user = userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        User friend = userStorage
-                .findUserById(friendId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
-
-        user.addFriend(friendId);
-        friend.addFriend(userId);*/
-
         getUserById(userId);
         getUserById(friendId);
         boolean isUserToFriend = friendshipStorage.findFriendsByUser(userId).contains(friendId);
@@ -66,41 +56,18 @@ public class UserServiceImpl implements UserService {
         } else if (isUserToFriend && !isFriendToUser) {
             friendshipStorage.updateFriend(friendId, userId, true);
         } else {
-            log.debug("Повторный запрос в друзья от пользователя с id {} пользователю с id {}", userId, friendId);
+            log.debug("Repeated friend request from user with id {} to user with id {}", userId, friendId);
         }
         return friendshipStorage.findFriendsByUser(userId);
-        /*friendshipStorage.addFriend(userId, friendId);
-
-        return userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
-                .getFriends()
-                .size();*/
     }
 
     @Override
     public void deleteFromFriends(int userId, int friendId) {
-        /*User user = userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        User friend = userStorage
-                .findUserById(friendId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId));
-
-        user.deleteFriend(friendId);
-        friend.deleteFriend(userId);*/
         friendshipStorage.deleteFriend(userId, friendId);
     }
 
     @Override
     public Optional<List<User>> getFriendsList(int userId) {
-        /*return userStorage
-                .findUserById(id)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + id))
-                .getFriends()
-                .stream()
-                .map(userStorage::findUserById)
-                .collect(Collectors.toList());*/
         List<User> friendsList = new ArrayList<>();
 
         for (Integer friend : friendshipStorage.findFriendsByUser(userId)) {
@@ -111,20 +78,9 @@ public class UserServiceImpl implements UserService {
         return Optional.ofNullable(friendsList);
 
     }
+
     @Override
     public List<User> getCommonFriends(int user1Id, int user2Id) {
-       /* Set<Integer> users = userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId))
-                .getFriends();
-        return userStorage
-                .findUserById(friendId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + friendId))
-                .getFriends()
-                .stream()
-                .filter(users::contains)
-                .map(userStorage::findUserById)
-                .collect(Collectors.toList());*/
         Set<Integer> common = new HashSet<>(friendshipStorage.findFriendsByUser(user1Id));
         common.retainAll(friendshipStorage.findFriendsByUser(user2Id));
 

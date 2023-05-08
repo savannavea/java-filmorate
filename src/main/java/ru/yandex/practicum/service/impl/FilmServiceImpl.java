@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.Film;
-import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.FilmService;
 import ru.yandex.practicum.storage.FilmStorage;
-import ru.yandex.practicum.storage.GenreStorage;
-import ru.yandex.practicum.storage.UserStorage;
 
 import java.util.Comparator;
 import java.util.List;
@@ -19,8 +16,6 @@ import java.util.stream.Collectors;
 public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
-    private final GenreStorage genreStorage;
 
     @Override
     public Film create(Film film) {
@@ -57,7 +52,10 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void deleteLike(int userId, int filmId) {
-        filmStorage.deleteLike(filmId, userId);
+        boolean isDeleted = filmStorage.deleteLike(filmId, userId);
+        if (!isDeleted) {
+            throw new NotFoundException("Not found");
+        }
     }
 
     @Override

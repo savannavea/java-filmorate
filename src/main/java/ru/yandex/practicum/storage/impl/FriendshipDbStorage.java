@@ -1,13 +1,11 @@
 package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.storage.FriendshipStorage;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -41,7 +39,7 @@ public class FriendshipDbStorage implements FriendshipStorage {
 
     @Override
     public boolean deleteFriend(int userId, int friendId) {
-        String sql = "delete from friendship where (user_id = ? AND friend_id = ?)";
-        return jdbcTemplate.update(sql, userId, friendId) > 0;
+        String sql = "delete from friendship where (user_id = ? AND friend_id = ?) or (friend_id = ? and user_id = ?)";
+        return jdbcTemplate.update(sql, userId, friendId, userId, friendId) > 0;
     }
 }

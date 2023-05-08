@@ -1,7 +1,6 @@
 package ru.yandex.practicum.storage;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FriendshipStorage {
 

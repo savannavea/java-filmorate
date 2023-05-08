@@ -129,6 +129,7 @@ public class FilmDbStorage implements FilmStorage {
                 .mpa(mpa)
                 .build();
         film.getGenres().addAll(genreDbStorage.findGenresByFilmId(id));
+        film.getLikes().addAll(getLikesByFilm(id));
         return film;
     }
 }

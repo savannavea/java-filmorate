@@ -54,5 +54,4 @@ public class GenreDbStorage implements GenreStorage {
         return Genre.builder().id(rs.getInt("genre_id"))
                 .name(rs.getString("name")).build();
     }
-
 }
