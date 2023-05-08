@@ -1,6 +1,7 @@
 package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.model.Genre;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -23,13 +25,29 @@ public class GenreDbStorage implements GenreStorage {
     @Override
     public Optional<Genre> findGenreById(int id) {
         String sql = "select * from genre where genre_id = ?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeGenre(rs), id));
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeGenre(rs), id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Genre> findAll() {
         String sql = "select * from genre";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs));
+    }
+
+    public List<Genre> findGenresByFilmId(int filmId) {
+        String sql = "select GENRE_ID from film_genre where film_id = ?;";
+        List<Integer> genreIds = jdbcTemplate.queryForList(sql, Integer.class, filmId);
+        return genreIds.stream()
+                .sorted()
+                .map(this::findGenreById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private Genre makeGenre(ResultSet rs) throws SQLException {

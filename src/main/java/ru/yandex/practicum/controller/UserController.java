@@ -82,13 +82,13 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
-    public List<Optional<User>> getFriendsList(@PathVariable int id) {
+    public Optional<List<User>> getFriendsList(@PathVariable int id) {
         return userService.getFriendsList(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Optional<User>> getFriendsCommonList(@PathVariable int id, @PathVariable int otherId) {
+    public List<User> getFriendsCommonList(@PathVariable int id, @PathVariable int otherId) {
         return userService.getCommonFriends(id, otherId);
     }
 

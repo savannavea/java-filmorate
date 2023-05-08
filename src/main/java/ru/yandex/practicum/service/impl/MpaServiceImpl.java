@@ -2,22 +2,23 @@ package ru.yandex.practicum.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.exception.NotFoundException;
 import ru.yandex.practicum.model.MPA;
 import ru.yandex.practicum.service.MpaService;
 import ru.yandex.practicum.storage.MpaStorage;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class MpaServiceImpl implements MpaService {
 
-    MpaStorage mpaStorage;
+    private final MpaStorage mpaStorage;
 
     @Override
-    public Optional<MPA> getMPAById(int id) {
-        return mpaStorage.findMPAById(id);
+    public MPA getMPAById(int id) {
+        return mpaStorage.findMPAById(id)
+                .orElseThrow(() -> new NotFoundException("MPA's id %d doesn't found!" + id));
     }
 
     @Override

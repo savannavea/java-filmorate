@@ -11,7 +11,6 @@ import ru.yandex.practicum.model.Genre;
 import ru.yandex.practicum.service.GenreService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -23,13 +22,11 @@ public class GenreController {
 
     @GetMapping
     public List<Genre> findAll() {
-
         return genreService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<Genre> findById(@PathVariable int id) {
-
+    public Genre findById(@PathVariable int id) {
         return genreService.getGenreById(id);
     }
 }

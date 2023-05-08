@@ -15,12 +15,12 @@ public interface UserService {
 
     User getUserById(int id);
 
-    Integer addToFriends(int userId, int filmId);
+    List<Integer> addToFriends(int userId, int filmId);
 
     void deleteFromFriends(int userId, int filmId);
 
-    List<Optional<User>> getFriendsList(int id);
+    Optional<List<User>> getFriendsList(int id);
 
-    List<Optional<User>> getCommonFriends(int userId, int friendId);
+    List<User> getCommonFriends(int userId, int friendId);
 
 }

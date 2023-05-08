@@ -1,6 +1,7 @@
 package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.storage.FriendshipStorage;
@@ -18,10 +19,10 @@ public class FriendshipDbStorage implements FriendshipStorage {
     }
 
     @Override
-    public Optional<List<Integer>> findFriendsByUser(int id) {
+    public List<Integer> findFriendsByUser(int id) {
         String sql = "select friend_id from friendship where user_id =? and status = true " +
                 "union select user_id from friendship where friend_id = ?";
-        return Optional.ofNullable(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("friend_id"), id, id));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("friend_id"), id, id);
     }
 
     @Override

@@ -18,4 +18,12 @@ public interface FilmStorage {
 
     boolean clearGenresFromFilm(int filmId);
 
+   // List<Film> listTopFilms(int count);
+
+    List<Integer> getLikesByFilm(int filmId);
+
+    boolean addLike(int filmId, int userId);
+
+    boolean deleteLike(int filmId, int userId);
+
 }

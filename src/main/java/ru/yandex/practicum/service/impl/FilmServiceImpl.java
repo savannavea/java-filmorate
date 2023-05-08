@@ -7,6 +7,7 @@ import ru.yandex.practicum.model.Film;
 import ru.yandex.practicum.model.User;
 import ru.yandex.practicum.service.FilmService;
 import ru.yandex.practicum.storage.FilmStorage;
+import ru.yandex.practicum.storage.GenreStorage;
 import ru.yandex.practicum.storage.UserStorage;
 
 import java.util.Comparator;
@@ -19,6 +20,7 @@ public class FilmServiceImpl implements FilmService {
 
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
+    private final GenreStorage genreStorage;
 
     @Override
     public Film create(Film film) {
@@ -50,24 +52,12 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void addLike(int userId, int filmId) {
-        User user = userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        Film film = filmStorage
-                .findFilmById(filmId)
-                .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
-        film.addLike(user);
+        filmStorage.addLike(filmId, userId);
     }
 
     @Override
     public void deleteLike(int userId, int filmId) {
-        User user = userStorage
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("User's id %d doesn't found!" + userId));
-        Film film = filmStorage
-                .findFilmById(filmId)
-                .orElseThrow(() -> new NotFoundException("Film's id %d doesn't found!" + filmId));
-        film.deleteLike(user);
+        filmStorage.deleteLike(filmId, userId);
     }
 
     @Override

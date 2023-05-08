@@ -1,6 +1,7 @@
 package ru.yandex.practicum.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,12 @@ public class UserDbStorage implements UserStorage {
     public Optional<User> findUserById(int id) {
 
         String sql = "select * from users where user_id = ?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToUser(rs), id));
+        try {
+            User user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToUser(rs), id);
+            return Optional.of(user);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

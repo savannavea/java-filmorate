@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface FriendshipStorage {
 
-    Optional<List<Integer>> findFriendsByUser(int id);
+    List<Integer> findFriendsByUser(int id);
 
     boolean addFriend(int userId, int friendId);
 

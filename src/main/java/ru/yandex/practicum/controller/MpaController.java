@@ -9,7 +9,6 @@ import ru.yandex.practicum.model.MPA;
 import ru.yandex.practicum.service.MpaService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/mpa")
@@ -24,13 +23,11 @@ public class MpaController {
 
     @GetMapping
     public List<MPA> findAll() {
-
         return mpaService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Optional<MPA> getById(@PathVariable int id) {
-
+    public MPA getById(@PathVariable int id) {
         return mpaService.getMPAById(id);
     }
 }
