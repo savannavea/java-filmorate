@@ -24,7 +24,7 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public Optional<Genre> findGenreById(int id) {
-        String sql = "select * from genre where genre_id = ?";
+        String sql = "SELECT * FROM genre WHERE genre_id = ?";
         try {
             return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeGenre(rs), id));
         } catch (EmptyResultDataAccessException e) {
@@ -34,12 +34,12 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public List<Genre> findAll() {
-        String sql = "select * from genre";
+        String sql = "SELECT * FROM genre";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs));
     }
 
     public List<Genre> findGenresByFilmId(int filmId) {
-        String sql = "select GENRE_ID from film_genre where film_id = ?;";
+        String sql = "SELECT GENRE_ID FROM film_genre WHERE film_id = ?;";
         List<Integer> genreIds = jdbcTemplate.queryForList(sql, Integer.class, filmId);
         return genreIds.stream()
                 .sorted()
@@ -51,7 +51,9 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     private Genre makeGenre(ResultSet rs) throws SQLException {
-        return Genre.builder().id(rs.getInt("genre_id"))
-                .name(rs.getString("name")).build();
+        return Genre.builder()
+                .id(rs.getInt("genre_id"))
+                .name(rs.getString("name"))
+                .build();
     }
 }

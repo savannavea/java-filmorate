@@ -1,12 +1,12 @@
 package ru.yandex.practicum.service;
 
-import ru.yandex.practicum.model.MPA;
+import ru.yandex.practicum.model.Mpa;
 
 import java.util.List;
 
 public interface MpaService {
 
-    MPA getMPAById(int id);
+    Mpa getById(int id);
 
-    List<MPA> getAll();
+    List<Mpa> getAll();
 }

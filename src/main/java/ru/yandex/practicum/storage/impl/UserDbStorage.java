@@ -11,7 +11,9 @@ import ru.yandex.practicum.storage.UserStorage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public Optional<User> findUserById(int id) {
 
-        String sql = "select * from users where user_id = ?";
+        String sql = "SELECT * FROM users WHERE user_id = ?";
         try {
             User user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToUser(rs), id);
             return Optional.of(user);
@@ -38,12 +40,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User create(User user) {
-        final String sql = "insert into users (name, login, birthday, email) values (?, ?, ?, ?)";
-
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("user_id");
-        int id = simpleJdbcInsert.executeAndReturnKey(user.toMap()).intValue();
+        int id = simpleJdbcInsert.executeAndReturnKey(toMap(user)).intValue();
         user.setId(id);
 
         return user;
@@ -52,7 +52,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-        String sql = "update users set email = ?, login = ?, name = ?, birthday = ? where user_id = ?";
+        String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?";
         jdbcTemplate.update(sql,
                 user.getEmail(),
                 user.getLogin(),
@@ -64,7 +64,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> findAll() {
-        String sql = "select * from users";
+        String sql = "SELECT * FROM users";
         return jdbcTemplate.query(sql, (rs, numOfRow) -> mapRowToUser(rs));
     }
 
@@ -81,5 +81,14 @@ public class UserDbStorage implements UserStorage {
                 .name(name)
                 .birthday(birthday)
                 .build();
+    }
+
+    private Map<String, Object> toMap(User user) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", user.getEmail());
+        values.put("login", user.getLogin());
+        values.put("name", user.getName());
+        values.put("birthday", user.getBirthday());
+        return values;
     }
 }

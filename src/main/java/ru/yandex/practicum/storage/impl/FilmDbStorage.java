@@ -6,13 +6,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.model.Film;
-import ru.yandex.practicum.model.MPA;
+import ru.yandex.practicum.model.Mpa;
 import ru.yandex.practicum.storage.FilmStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -32,7 +34,7 @@ public class FilmDbStorage implements FilmStorage {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("films")
                 .usingGeneratedKeyColumns("film_id");
-        int id = simpleJdbcInsert.executeAndReturnKey(film.toMap()).intValue();
+        int id = simpleJdbcInsert.executeAndReturnKey(toMap(film)).intValue();
         film.setId(id);
         film.getGenres().forEach(genre -> addGenreToFilm(id, genre.getId()));
         return film;
@@ -40,8 +42,8 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        String sql = "update films set name = ?, description = ?, release_date = ?, " +
-                "duration = ?, mpa_id = ? where film_id = ?";
+        String sql = "UPDATE films SET name = ?, description = ?, release_date = ?, " +
+                "duration = ?, mpa_id = ? WHERE film_id = ?";
 
         jdbcTemplate.update(sql,
                 film.getName(),
@@ -60,7 +62,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Optional<Film> findFilmById(int id) {
-        String sql = "select * from films left join mpa on films.mpa_id = mpa.mpa_id where film_id = ? ;";
+        String sql = "SELECT * FROM films LEFT JOIN mpa ON films.mpa_id = mpa.mpa_id WHERE film_id = ? ;";
         try {
             return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToFilm(rs), id));
         } catch (EmptyResultDataAccessException e) {
@@ -70,39 +72,39 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> findAll() {
-        String sql = "select * from films left join mpa on films.mpa_id = mpa.mpa_id;";
+        String sql = "SELECT * FROM films LEFT JOIN mpa ON films.mpa_id = mpa.mpa_id;";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToFilm(rs));
     }
 
     @Override
     public boolean addGenreToFilm(int filmId, int genreId) {
-        String sql = "insert into film_genre(film_id, genre_id) " +
-                "values (?, ?)";
+        String sql = "INSERT INTO film_genre(film_id, genre_id) " +
+                "VALUES (?, ?)";
         return jdbcTemplate.update(sql, filmId, genreId) > 0;
     }
 
     @Override
     public boolean clearGenresFromFilm(int filmId) {
-        String sql = "delete from film_genre where film_id = ?";
+        String sql = "DELETE FROM film_genre WHERE film_id = ?";
         return jdbcTemplate.update(sql, filmId) > 0;
     }
 
     @Override
     public List<Integer> getLikesByFilm(int filmId) {
-        String sql = "select user_id from likes where film_id =?";
+        String sql = "SELECT user_id FROM likes WHERE film_id =?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("user_id"), filmId);
     }
 
     @Override
     public boolean addLike(int filmId, int userId) {
-        String sql = "insert into likes(film_id, user_id) " +
-                "values (?, ?)";
+        String sql = "INSERT INTO likes(film_id, user_id) " +
+                "VALUES (?, ?)";
         return jdbcTemplate.update(sql, filmId, userId) > 0;
     }
 
     @Override
     public boolean deleteLike(int filmId, int userId) {
-        String sql = "delete from likes where (film_id = ? AND user_id = ?)";
+        String sql = "DELETE FROM likes WHERE (film_id = ? AND user_id = ?)";
         return jdbcTemplate.update(sql, filmId, userId) > 0;
     }
 
@@ -115,7 +117,7 @@ public class FilmDbStorage implements FilmStorage {
         int mpaId = rs.getInt("mpa_id");
         String mpaName = rs.getString("mpa.name");
 
-        MPA mpa = MPA.builder()
+        Mpa mpa = Mpa.builder()
                 .id(mpaId)
                 .name(mpaName)
                 .build();
@@ -131,5 +133,16 @@ public class FilmDbStorage implements FilmStorage {
         film.getGenres().addAll(genreDbStorage.findGenresByFilmId(id));
         film.getLikes().addAll(getLikesByFilm(id));
         return film;
+    }
+
+    public Map<String, Object> toMap(Film film) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", film.getName());
+        values.put("description", film.getDescription());
+        values.put("release_date", film.getReleaseDate());
+        values.put("duration", film.getDuration());
+        values.put("mpa_id", film.getMpa().getId());
+        values.put("genres", film.getGenres());
+        return values;
     }
 }

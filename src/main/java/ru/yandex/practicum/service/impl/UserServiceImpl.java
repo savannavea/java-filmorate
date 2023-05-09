@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<List<User>> getFriendsList(int userId) {
+    public List<User> getFriends(int userId) {
         List<User> friendsList = new ArrayList<>();
 
         for (Integer friend : friendshipStorage.findFriendsByUser(userId)) {
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         }
 
         log.info("List friends User №" + userId);
-        return Optional.ofNullable(friendsList);
+        return friendsList;
 
     }
 

@@ -31,22 +31,11 @@ public class Film {
     private Integer duration;
 
     @JsonProperty
-    private MPA mpa;
+    private Mpa mpa;
 
     @JsonProperty
     private final Set<Integer> likes = new HashSet<>();
 
     @JsonProperty
     private final List<Genre> genres = new ArrayList<>();
-
-    public Map<String, Object> toMap() {
-        Map<String, Object> values = new HashMap<>();
-        values.put("name", name);
-        values.put("description", description);
-        values.put("release_date", releaseDate);
-        values.put("duration", duration);
-        values.put("mpa_id", mpa.getId());
-        values.put("genres", genres);
-        return values;
-    }
 }

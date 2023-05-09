@@ -14,7 +14,6 @@ import ru.yandex.practicum.service.UserService;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -82,8 +81,8 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<List<User>> getFriendsList(@PathVariable int id) {
-        return userService.getFriendsList(id);
+    public List<User> getFriendsList(@PathVariable int id) {
+        return userService.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")

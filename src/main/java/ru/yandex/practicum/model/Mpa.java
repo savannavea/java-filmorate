@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MPA {
+public class Mpa {
     @JsonProperty
     private Integer id;
 

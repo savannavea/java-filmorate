@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.model.MPA;
+import ru.yandex.practicum.model.Mpa;
 import ru.yandex.practicum.storage.MpaStorage;
 
 import java.sql.ResultSet;
@@ -22,8 +22,8 @@ public class MpaDbStorage implements MpaStorage {
     }
 
     @Override
-    public Optional<MPA> findMPAById(int id) {
-        String sql = "select * from mpa where mpa_id = ?";
+    public Optional<Mpa> findMpaById(int id) {
+        String sql = "SELECT * FROM mpa WHERE mpa_id = ?";
         try {
             return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeMPA(rs), id));
         } catch (EmptyResultDataAccessException e) {
@@ -32,14 +32,14 @@ public class MpaDbStorage implements MpaStorage {
     }
 
     @Override
-    public List<MPA> findAll() {
-        String sql = "select * from mpa";
+    public List<Mpa> findAll() {
+        String sql = "SELECT * FROM mpa";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeMPA(rs));
     }
 
-    private MPA makeMPA(ResultSet rs) throws SQLException {
+    private Mpa makeMPA(ResultSet rs) throws SQLException {
         int mpaId = rs.getInt("mpa_id");
         String mpaName = rs.getString("name");
-        return MPA.builder().id(mpaId).name(mpaName).build();
+        return Mpa.builder().id(mpaId).name(mpaName).build();
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.model.MPA;
+import ru.yandex.practicum.model.Mpa;
 import ru.yandex.practicum.service.MpaService;
 
 import java.util.List;
@@ -22,12 +22,12 @@ public class MpaController {
     }
 
     @GetMapping
-    public List<MPA> findAll() {
+    public List<Mpa> findAll() {
         return mpaService.getAll();
     }
 
     @GetMapping("/{id}")
-    public MPA getById(@PathVariable int id) {
-        return mpaService.getMPAById(id);
+    public Mpa getById(@PathVariable int id) {
+        return mpaService.getById(id);
     }
 }
