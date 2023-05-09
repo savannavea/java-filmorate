@@ -29,7 +29,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public Optional<User> findUserById(int id) {
 
-        String sql = "SELECT * FROM users WHERE user_id = ?";
+        String sql = "SELECT * FROM users WHERE id = ?";
         try {
             User user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToUser(rs), id);
             return Optional.of(user);
@@ -42,7 +42,7 @@ public class UserDbStorage implements UserStorage {
     public User create(User user) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
-                .usingGeneratedKeyColumns("user_id");
+                .usingGeneratedKeyColumns("id");
         int id = simpleJdbcInsert.executeAndReturnKey(toMap(user)).intValue();
         user.setId(id);
 
@@ -52,7 +52,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-        String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 user.getEmail(),
                 user.getLogin(),
@@ -69,7 +69,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     private User mapRowToUser(ResultSet rs) throws SQLException {
-        int id = rs.getInt("user_id");
+        int id = rs.getInt("id");
         String email = rs.getString("email");
         String login = rs.getString("login");
         String name = rs.getString("name");

@@ -39,7 +39,7 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     public List<Genre> findGenresByFilmId(int filmId) {
-        String sql = "SELECT GENRE_ID FROM film_genre WHERE film_id = ?;";
+        String sql = "SELECT genre_id FROM film_genre WHERE film_id = ?;";
         List<Integer> genreIds = jdbcTemplate.queryForList(sql, Integer.class, filmId);
         return genreIds.stream()
                 .sorted()

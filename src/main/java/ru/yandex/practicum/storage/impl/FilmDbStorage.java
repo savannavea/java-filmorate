@@ -33,7 +33,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film create(Film film) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("films")
-                .usingGeneratedKeyColumns("film_id");
+                .usingGeneratedKeyColumns("id");
         int id = simpleJdbcInsert.executeAndReturnKey(toMap(film)).intValue();
         film.setId(id);
         film.getGenres().forEach(genre -> addGenreToFilm(id, genre.getId()));
@@ -43,7 +43,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film update(Film film) {
         String sql = "UPDATE films SET name = ?, description = ?, release_date = ?, " +
-                "duration = ?, mpa_id = ? WHERE film_id = ?";
+                "duration = ?, mpa_id = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
                 film.getName(),
@@ -62,7 +62,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Optional<Film> findFilmById(int id) {
-        String sql = "SELECT * FROM films LEFT JOIN mpa ON films.mpa_id = mpa.mpa_id WHERE film_id = ? ;";
+        String sql = "SELECT * FROM films LEFT JOIN mpa ON films.mpa_id = mpa.mpa_id WHERE id = ? ;";
         try {
             return Optional.of(jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRowToFilm(rs), id));
         } catch (EmptyResultDataAccessException e) {
@@ -109,7 +109,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private Film mapRowToFilm(ResultSet rs) throws SQLException {
-        int id = rs.getInt("film_id");
+        int id = rs.getInt("id");
         String name = rs.getString("films.name");
         String description = rs.getString("description");
         LocalDate releaseDate = rs.getDate("release_date").toLocalDate();

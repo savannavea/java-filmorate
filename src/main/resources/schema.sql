@@ -1,66 +1,55 @@
 --схема будет создаваться заново при каждом запуске приложения: создание таблиц
 --избежать ошибок, связанных с многократным применением скрипта к БД — IF NOT EXISTS при создании таблиц и индексов.
-create table IF NOT EXISTS USERS
+CREATE TABLE IF NOT EXISTS users
 (
-    USER_ID  INTEGER auto_increment
-    primary key,
-    EMAIL    CHARACTER VARYING(255) not null,
-    LOGIN    CHARACTER VARYING(50)  not null,
-    NAME     CHARACTER VARYING(50)  not null,
-    BIRTHDAY DATE                   not null
-    );
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    email CHARACTER VARYING(255) NOT NULL,
+    login CHARACTER VARYING(50) NOT NULL,
+    name CHARACTER VARYING(50) NOT NULL,
+    birthday DATE NOT NULL
+);
 
-create table IF NOT EXISTS FRIENDSHIP
+CREATE TABLE IF NOT EXISTS friendship
 (
-    USER_ID   INTEGER not null
-    references USERS (USER_ID) ON DELETE CASCADE,
-    FRIEND_ID INTEGER not null
-    references USERS (USER_ID) ON DELETE CASCADE,
-    STATUS    BOOLEAN not null,
-    primary key (USER_ID, FRIEND_ID)
-    );
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    friend_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    status BOOLEAN NOT NULL,
+    PRIMARY KEY (user_id, friend_id)
+);
 
-create table IF NOT EXISTS MPA
+CREATE TABLE IF NOT EXISTS mpa
 (
-    MPA_ID      INTEGER auto_increment
-    primary key,
-    NAME        CHARACTER VARYING(50) not null UNIQUE,
-    DESCRIPTION CHARACTER VARYING(100)
-    );
+    mpa_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name CHARACTER VARYING(50) NOT NULL UNIQUE,
+    description CHARACTER VARYING(100)
+);
 
-create table IF NOT EXISTS GENRE
+CREATE TABLE IF NOT EXISTS genre
 (
-    GENRE_ID INTEGER auto_increment
-    primary key,
-    NAME     CHARACTER VARYING(50) UNIQUE
-    );
+    genre_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    name CHARACTER VARYING(50) UNIQUE
+);
 
-create table IF NOT EXISTS FILMS
+CREATE TABLE IF NOT EXISTS films
 (
-    FILM_ID      INTEGER auto_increment
-    primary key,
-    NAME         CHARACTER VARYING(150) not null,
-    DESCRIPTION  CHARACTER VARYING(200) not null,
-    RELEASE_DATE DATE                   not null,
-    DURATION     INTEGER                not null,
-    MPA_ID       INTEGER                not null
-    references MPA (MPA_ID) ON DELETE RESTRICT
-    );
+    id INTEGER auto_increment primary key,
+    name CHARACTER VARYING(150) NOT NULL,
+    description CHARACTER VARYING(200) NOT NULL,
+    release_date DATE NOT NULL,
+    duration INTEGER NOT NULL,
+    mpa_id INTEGER NOT NULL REFERENCES mpa (mpa_id) ON DELETE RESTRICT
+);
 
-create table IF NOT EXISTS FILM_GENRE
+CREATE TABLE IF NOT EXISTS film_genre
 (
-    FILM_ID  INTEGER not null
-    references FILMS ON DELETE CASCADE,
-    GENRE_ID INTEGER not null
-    references GENRE ON DELETE CASCADE,
-    primary key (FILM_ID, GENRE_ID)
-    );
+    film_id INTEGER NOT NULL REFERENCES films ON DELETE CASCADE,
+    genre_id INTEGER NOT NULL REFERENCES genre ON DELETE CASCADE,
+    PRIMARY KEY (film_id, genre_id)
+);
 
-create table IF NOT EXISTS LIKES
+CREATE TABLE IF NOT EXISTS likes
 (
-    FILM_ID INTEGER not null
-    references FILMS ON DELETE CASCADE,
-    USER_ID INTEGER not null
-    references USERS ON DELETE CASCADE,
-    primary key (FILM_ID, USER_ID)
-    );
+    film_id INTEGER NOT NULL REFERENCES films ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
+    PRIMARY KEY (film_id, user_id)
+);
