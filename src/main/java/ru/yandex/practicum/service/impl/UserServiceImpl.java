@@ -91,6 +91,5 @@ public class UserServiceImpl implements UserService {
 
         log.info("List of mutual friends User №" + user1Id + " and User №" + user2Id + "ready");
         return commonFriends;
-
     }
 }
