@@ -1,4 +1,3 @@
-
 MERGE INTO MPA
     KEY(MPA_ID)
     VALUES (1, 'G', 'У фильма нет возрастных ограничений'),

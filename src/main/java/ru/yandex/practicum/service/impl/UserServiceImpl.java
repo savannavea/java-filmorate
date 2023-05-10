@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
 
         log.info("List friends User №" + userId);
         return friendsList;
-
     }
 
     @Override
