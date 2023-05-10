@@ -14,4 +14,14 @@ public interface FilmStorage {
 
     List<Film> findAll();
 
+    boolean addGenreToFilm(int filmId, int genreId);
+
+    boolean clearGenresFromFilm(int filmId);
+
+    List<Integer> getLikesByFilm(int filmId);
+
+    boolean addLike(int filmId, int userId);
+
+    boolean deleteLike(int filmId, int userId);
+
 }

@@ -7,8 +7,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -31,13 +30,12 @@ public class Film {
     @JsonProperty
     private Integer duration;
 
+    @JsonProperty
+    private Mpa mpa;
+
+    @JsonProperty
     private final Set<Integer> likes = new HashSet<>();
 
-    public void addLike(User user) {
-        likes.add(user.getId());
-    }
-
-    public void deleteLike(User user) {
-        likes.remove(user.getId());
-    }
+    @JsonProperty
+    private final List<Genre> genres = new ArrayList<>();
 }
