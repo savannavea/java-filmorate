@@ -7,9 +7,8 @@ import ru.yandex.practicum.model.Genre;
 import ru.yandex.practicum.service.GenreService;
 import ru.yandex.practicum.storage.GenreStorage;
 
-import java.util.Comparator;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +24,6 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<Genre> getAll() {
-        return genreStorage.findAll().stream()
-                .sorted(Comparator.comparingInt(Genre::getId))
-                .collect(Collectors.toList());
+        return genreStorage.findAll();
     }
 }
