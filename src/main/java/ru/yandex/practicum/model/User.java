@@ -37,13 +37,4 @@ public class User {
     private LocalDate birthday;
 
     private final Set<Integer> friends = new HashSet<>();
-
-
-    public void addFriend(int friendId) {
-        friends.add(friendId);
-    }
-
-    public boolean deleteFriend(int friendId) {
-        return friends.remove(friendId);
-    }
 }
